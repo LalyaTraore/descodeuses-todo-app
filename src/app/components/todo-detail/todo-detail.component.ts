@@ -56,8 +56,10 @@ export class TodoDetailComponent implements OnInit {
   }
 
   onSubmit() {
-    //tester si formulaire valide
+    if(this.formGroup.value.dueDate)
+      this.formGroup.value.dueDate = this.toLocalIsoString(this.formGroup.value.dueDate);
 
+    //tester si formulaire valide
     if(this.formGroup.valid) {
       //faire appel au update du service CRUD
       this.todoService.updateTodo(this.formGroup.value).subscribe(data=>
@@ -76,4 +78,12 @@ export class TodoDetailComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
+   toLocalIsoString(dateString: string): string {
+    const dateObject = new Date(dateString);
+    return new Date(dateObject.getTime() - dateObject.getTimezoneOffset() * 60000).toISOString();
+  }
+
 }
+
+
+   

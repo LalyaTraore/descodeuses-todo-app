@@ -8,7 +8,6 @@ import { Todo } from '../../models/todo.model';
   templateUrl: './todo-table.component.html',
   styleUrl: './todo-table.component.css'
 })
-
 export class TodoTableComponent implements OnInit {
   todos: Todo[] = [];
   displayedColumns: string[] = ['id', 'title', 'completed', 'priority', 'dueDate', 'description'];

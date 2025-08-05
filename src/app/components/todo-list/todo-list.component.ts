@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TodoService } from '../../services/todo.service';
@@ -10,21 +9,18 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
   selector: 'app-todo-list',
   standalone: false,
   templateUrl: './todo-list.component.html',
-  styleUrl: './todo-list.component.css',
+  styleUrl: './todo-list.component.css'
 })
 export class TodoListComponent implements OnInit {
   formGroup: FormGroup;
   todos: Todo[] = [];
 
-  constructor(
-    private fb: FormBuilder,
-    private todoService: TodoService,
-    private snackBar: MatSnackBar
-  ) {
+  constructor(private fb: FormBuilder, private todoService: TodoService, private snackBar: MatSnackBar) {
     this.formGroup = this.fb.group({
-      title: ['', [Validators.required]],
+      title: ['', [Validators.required]]
     });
   }
+
   ngOnInit(): void {
     this.fetchTodo();
   }
@@ -46,10 +42,10 @@ export class TodoListComponent implements OnInit {
         completed: false,
         priority: null,
         dueDate: '',
-        description: null,
+        description: null
       };
 
-      this.todoService.addTodo(todo).subscribe((data) => {
+      this.todoService.addTodo(todo).subscribe(data => {
         //Actualiser la liste apres l'ajout
         this.fetchTodo();
       });
@@ -57,11 +53,13 @@ export class TodoListComponent implements OnInit {
   }
 
   onDeleteTodo(id: number | null) {
-    if (id == null) return;
+    if (id == null)
+      return;
+
 
     this.todoService.deleteTodo(id).subscribe(() => {
       this.fetchTodo();
-      this.snackBar.open('Deleted !', '', { duration: 1000 });
+      this.snackBar.open('Deleted !', '', {duration:1000});
     });
   }
 
@@ -70,11 +68,13 @@ export class TodoListComponent implements OnInit {
     todo.completed = event.checked;
 
     //mettre à jour dans l'api
-    this.todoService.updateTodo(todo).subscribe((data) => {
+    this.todoService.updateTodo(todo).subscribe(data => {
       console.log(data);
-      this.snackBar.open('Updated !', '', { duration: 1000 });
+      this.snackBar.open('Updated !', '', {duration:1000});
     });
   }
+
 }
+
 
 

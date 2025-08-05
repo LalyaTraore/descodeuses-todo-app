@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, RouterModule, RouterOutlet } from '@angular/router'
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 //'@' signifie decorateur
 //qui decore la classe component
@@ -18,20 +19,20 @@ import { Router, RouterModule, RouterOutlet } from '@angular/router'
 //'implements' pour implementer une interface
 //une classe peut implementer plusieurs interfaces
 export class LoginComponent implements OnInit {
-  [x: string]: any;
   //'!' pour pouvoir initialiser la variable ultérieurement
   loginForm! : FormGroup;
-  
+
   //j'utilise l'injection automatique de angular pour recuperer
   //un objet form builder qui va construire le formulaire
   //pour faire cela j'ajoute ce que j'ai besoin dans les parametres
 
-  //'private' avant formBuilder pour pouvoir acceder a la variable 
+  //'private' avant formBuilder pour pouvoir acceder a la variable
   //en dehors du constructeur
-  constructor(private formBuilder : FormBuilder, private router : Router) {
+  constructor(private formBuilder : FormBuilder, private router : Router, public authService: AuthService) {
+    //le service authService est injecté pour pouvoir l'utiliser
   }
 
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       //1er parametre: valeur initiale du champ
       //2eme parametre: liste de validators
@@ -41,19 +42,17 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    if (
-        this.loginForm.value.username == 'admin@test.com' &&
-        this.loginForm.value.password == 'admin'
-      ) {
-        sessionStorage.setItem('isLoggedIn', 'true');
-        this.router.navigateByUrl('');
-      }
-      console.log(this.loginForm.value);
-      console.log(this.loginForm.value.username);
+    if (this.loginForm.valid) {
+      const credentials = this.loginForm.value;
+      this.authService.login(credentials).subscribe({
+          next: (res) => {
+            sessionStorage.setItem('authToken', res.token);
+            this.router.navigateByUrl('');
+          },
+          error: (err) => console.error('Erreur de connexion', err),
+        });
 
-      //ca donne undefined
-      //erreur non identifie car formulaire non type
-      
     }
   }
 
+}

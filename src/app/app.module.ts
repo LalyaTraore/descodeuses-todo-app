@@ -12,13 +12,12 @@ import {MatListModule} from '@angular/material/list';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SignUpComponent } from './components/sign-up/sign-up.component';
 import {MatSelectModule} from '@angular/material/select';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import {MatCardModule} from '@angular/material/card';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api'
 import { InMemoryDataService } from './services/in-memory-data.service';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { UtilisateurListComponent } from './components/utilisateur-list/utilisateur-list.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -28,17 +27,22 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 import { TodoTableComponent } from './components/todo-table/todo-table.component';
 import {MatTableModule} from '@angular/material/table';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { CalculatriceComponent } from './components/calculatrice/calculatrice.component';
+import { authInterceptor } from './auth/auth.interceptor';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    SignUpComponent,
     TodoListComponent,
     UtilisateurListComponent,
     TodoDetailComponent,
     TodoTableComponent,
-    DashboardComponent
+    DashboardComponent,
+    CalculatriceComponent,
+    SignUpComponent,
+   
   ],
   imports: [
     //Importer les modules pour pouvoir utiliser 
@@ -58,16 +62,25 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     MatCheckboxModule,
     MatSnackBarModule,
     MatDatepickerModule,
-    MatTableModule
+    MatTableModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule
+  
+  
   ],
-  providers: [
-    provideHttpClient(),
-    
+    providers: [
+    provideHttpClient(
+      withInterceptors([
+        authInterceptor
+      ])
+    ), 
     //injecter in-memory-data.service.ts
     //comme il est @Injectable
-    importProvidersFrom([
-      HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService,{delay:200})
-    ]),
+    //importProvidersFrom([
+    //  HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService,{delay:200})
+    //]),
     provideNativeDateAdapter(),
     //localisation pour affichage en format francais (devise, date...)
     { provide: LOCALE_ID, useValue: 'fr'}
