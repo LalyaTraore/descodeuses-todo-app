@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl : 'https://planit-jmny.onrender.com'
+    apiUrl : 'https://planit-jmny.onrender.com'  
 };
