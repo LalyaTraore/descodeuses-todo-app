@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl : 'https://demo-test-lw8u.onrender.com'
+    apiUrl : 'https://planit-jmny.onrender.com'
 };
